@@ -22,7 +22,7 @@ class STestGenerator():
 
 
     def __generate_stest_medium(self):
-        MAX_OPERAND_NUMBER = 99
+        MAX_OPERAND_NUMBER = 30
         MIN_OPERAND_NUMBER = 1
         NUM_OPERANDS = 3
         OPERATORS = ['-', '+']
@@ -32,7 +32,7 @@ class STestGenerator():
 
 
     def __generate_stest_hard(self):
-        MAX_OPERAND_NUMBER = 99
+        MAX_OPERAND_NUMBER = 50
         MIN_OPERAND_NUMBER = 1
         NUM_OPERANDS = 4
         OPERATORS = ['-', '+']
@@ -44,7 +44,7 @@ class STestGenerator():
             operator = selected_operators[i] 
             if operator == '*':
                 first_operand = random.randint(2, 9)
-                second_operand = random.randint(10, 30)
+                second_operand = random.randint(10, 25)
                 operands += [first_operand, second_operand]
             else: operands.append(random.randint(MIN_OPERAND_NUMBER, MAX_OPERAND_NUMBER))
         return operands, selected_operators

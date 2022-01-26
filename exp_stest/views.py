@@ -18,7 +18,8 @@ def test_session_logging(request):
     current_datetime_in_seconds = datetime.now().timestamp()    
     status = 'Success'
     try: 
-        session_logger, _ = SessionLogger.objects.get_or_create(user_id=user_id, session_id=session_id)
+        stest_scoreboard, _ = STestScoreboard.objects.get_or_create(user_id=user_id)
+        session_logger, _ = SessionLogger.objects.get_or_create(user_id=stest_scoreboard, session_id=session_id)
         if type == 'Start':
             session_logger.start_time_in_seconds = current_datetime_in_seconds
         else:
@@ -47,11 +48,15 @@ def generate_stest_with_level(request):
 def validate_answer(request):
     user_id = request.data['user_id']
     level = request.data['level']
-    answer = int(request.data['answer'])
-    validate_result = STestValidator().validate(user_id, answer)
+    try:
+        answer = int(request.data['answer'])
+        validate_result = STestValidator().validate(user_id, answer)
+    except:
+        validate_result = False
 
     if validate_result:
-        obj = STestScoreboard.objects.get(user_id=user_id)
+        obj, _ = STestScoreboard.objects.get_or_create(user_id=user_id)
+        print(obj)
         if level == 'Easy':
             obj.stest_easy_num_question += 1
             obj.stest_easy_score += 1
