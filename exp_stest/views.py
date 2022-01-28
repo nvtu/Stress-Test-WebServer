@@ -1,12 +1,12 @@
-from http.client import HTTPResponse
-from django.shortcuts import render
 from rest_framework.decorators import api_view
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
+
 from .stest_helper.stest_generator import STestGenerator
 from .stest_helper.stest_validator import STestValidator
 from .stest_helper.stest_db import STestDB
 from datetime import datetime
-from .models import SessionLogger, STestScoreboard
+from .models import STestSessionLogger
+from scoreboard.models import Scoreboard
 
 
 # Create your views here.
@@ -18,8 +18,8 @@ def test_session_logging(request):
     current_datetime_in_seconds = datetime.now().timestamp()    
     status = 'Success'
     try: 
-        stest_scoreboard, _ = STestScoreboard.objects.get_or_create(user_id=user_id)
-        session_logger, _ = SessionLogger.objects.get_or_create(user_id=stest_scoreboard, session_id=session_id)
+        scoreboard, _ = Scoreboard.objects.get_or_create(user_id=user_id)
+        session_logger, _ = STestSessionLogger.objects.get_or_create(user_id=scoreboard, session_id=session_id)
         if type == 'Start':
             session_logger.start_time_in_seconds = current_datetime_in_seconds
         else:
@@ -55,7 +55,7 @@ def validate_answer(request):
         validate_result = False
 
     if validate_result:
-        obj, _ = STestScoreboard.objects.get_or_create(user_id=user_id)
+        obj, _ = Scoreboard.objects.get_or_create(user_id=user_id)
         print(obj)
         if level == 'Easy':
             obj.stest_easy_num_question += 1

@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'exp_stest.apps.ExpStestConfig',
+    'scoreboard.apps.ScoreboardConfig',
+    'reading_test.apps.ReadingTestConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
