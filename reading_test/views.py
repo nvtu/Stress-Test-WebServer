@@ -29,7 +29,7 @@ def test_session_logging(request):
     except Exception as e:
         status = 'Error'
         print(e)
-    return JsonResponse({'status': status})
+    return JsonResponse({'status': status, 'log_time': current_datetime_in_seconds})
 
 
 @api_view(['POST'])

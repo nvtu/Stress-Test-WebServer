@@ -11,20 +11,24 @@ from scoreboard.models import Scoreboard
 
 # Create your views here.
 @api_view(['POST'])
-def test_session_logging(request):
+def reset_score(request):
     user_id = request.data['user_id']
     session_id = request.data['session_id']
-    type = request.data['type'] # Start or Stop
-    current_datetime_in_seconds = datetime.now().timestamp()    
+    level = session_id.split('_')[-1] 
     status = 'Success'
     try: 
         scoreboard, _ = Scoreboard.objects.get_or_create(user_id=user_id)
-        session_logger, _ = STestSessionLogger.objects.get_or_create(user_id=scoreboard, session_id=session_id)
-        if type == 'Start':
-            session_logger.start_time_in_seconds = current_datetime_in_seconds
-        else:
-            session_logger.end_time_in_seconds = current_datetime_in_seconds
-        session_logger.save()
+        # Reset the scoreboard for the new session corresponding to the level
+        if level == 'Easy':
+            scoreboard.stest_easy_num_question = 0
+            scoreboard.stest_easy_num_correct = 0
+        elif level == 'Medium':
+            scoreboard.stest_medium_num_question = 0
+            scoreboard.stest_medium_num_correct = 0
+        elif level == 'Hard':
+            scoreboard.stest_hard_num_question = 0
+            scoreboard.stest_hard_num_correct = 0
+        scoreboard.save()
     except Exception as e:
         status = 'Error'
         print(e)
@@ -54,19 +58,20 @@ def validate_answer(request):
     except:
         validate_result = False
 
-    if validate_result:
-        obj, _ = Scoreboard.objects.get_or_create(user_id=user_id)
-        print(obj)
-        if level == 'Easy':
-            obj.stest_easy_num_question += 1
-            obj.stest_easy_score += 1
-        elif level == 'Medium':
-            obj.stest_medium_num_question += 1
-            obj.stest_medium_score += 2
-        elif level == 'Hard':
-            obj.stest_hard_num_question += 1
-            obj.stest_hard_score += 3
-        obj.save()
+    obj, _ = Scoreboard.objects.get_or_create(user_id=user_id)
+    if level == 'Easy':
+        obj.stest_easy_num_question += 1
+        if validate_result:
+            obj.stest_easy_num_correct += 1
+    elif level == 'Medium':
+        obj.stest_medium_num_question += 1
+        if validate_result:
+            obj.stest_medium_num_correct += 1
+    elif level == 'Hard':
+        obj.stest_hard_num_question += 1
+        if validate_result:
+            obj.stest_hard_num_correct += 1
+    obj.save()
 
     response = { 'validate_result': validate_result }
     return JsonResponse(response)

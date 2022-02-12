@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'exp_stest.apps.ExpStestConfig',
     'scoreboard.apps.ScoreboardConfig',
     'reading_test.apps.ReadingTestConfig',
+    'session_logger.apps.SessionLoggerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
