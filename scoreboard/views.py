@@ -17,7 +17,7 @@ def retrieve_scoreboard(request):
         total_points = score.reading1_score + score.reading2_score + score.reading3_score
         stest_easy_score = max(0, (3 * score.stest_easy_num_correct - score.stest_easy_num_question) / 2 * STEST_EASY_SCORE_PER_QUESTION)
         stest_medium_score = max(0, (3 * score.stest_medium_num_correct - score.stest_medium_num_question) / 2 * STEST_MEDIUM_SCORE_PER_QUESTION)
-        print(score.stest_medium_num_correct, score.stest_medium_num_question)
+        # print(score.stest_medium_num_correct, score.stest_medium_num_question)
         stest_hard_score = max(0, (3 * score.stest_hard_num_correct - score.stest_hard_num_question) / 2 * STEST_HARD_SCORE_PER_QUESTION)
         total_points += stest_easy_score + stest_medium_score + stest_hard_score
         scoreboard.append({
